@@ -140,7 +140,7 @@ namespace ConnectFour
                     Console.SetCursorPosition((c * 10) + 6, r + 8);
                     if (pieceVal < 2)
                     {
-                        Console.Write(Board.piece[r]);
+                        Console.Write(Screen.piece[r]);
                     }
                     else
                     {

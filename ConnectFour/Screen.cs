@@ -2,8 +2,9 @@
 
 namespace ConnectFour
 {
-    static class Board
+    static class Screen
     {
+        //Piece sprites
         public static string[] emptyPiece =
            {
             "         ",
@@ -28,33 +29,13 @@ namespace ConnectFour
             "   @@@   "
         };
 
-        //PIECE MAP
-        //-1 = EMPTY
-        //0 = BLACK
-        //1 = WHITE
-        //2 = SELECTION
-        public static int[,] pieceMap =
-        {
-            { -1, -1, -1, -1, -1, -1, -1 },
-            { -1, -1, -1, -1, -1, -1, -1 },
-            { -1, -1, -1, -1, -1, -1, -1 },
-            { -1, -1, -1, -1, -1, -1, -1 },
-            { -1, -1, -1, -1, -1, -1, -1 },
-            { -1, -1, -1, -1, -1, -1, -1 }
-        };
+        //Piece maps
+        public static PieceMap pieces;
+        public static PieceMap oldPieces;
+        
 
-        public static int[,] oldPieceMap =
-        {
-            { -1, -1, -1, -1, -1, -1, -1 },
-            { -1, -1, -1, -1, -1, -1, -1 },
-            { -1, -1, -1, -1, -1, -1, -1 },
-            { -1, -1, -1, -1, -1, -1, -1 },
-            { -1, -1, -1, -1, -1, -1, -1 },
-            { -1, -1, -1, -1, -1, -1, -1 }
-        };
-
-        //GAME BOARD
-        public static string[] boardMap =
+        //Game board outline
+        public static string[] boardOutline =
         {
             "     ╔═════════╦═════════╦═════════╦═════════╦═════════╦═════════╦═════════╗",
             "     ║         ║         ║         ║         ║         ║         ║         ║",
@@ -98,34 +79,28 @@ namespace ConnectFour
             Console.Clear();
             boardPlaced = false;
 
+            pieces = new PieceMap(PieceMap.def.Clone() as int[,]);
+            oldPieces = new PieceMap(PieceMap.def.Clone() as int[,]);
+
             if (Program.test)
             {
-                emptySpaceCount = 0;
-            }
-            else
-            {
-                emptySpaceCount = 42;
-            }
-
-            for (int r = 0; r < 6; r++)
-            {
-                for (int c = 0; c < 7; c++)
+                for (int r = 0; r < 6; r++)
                 {
-                    oldPieceMap[r, c] = -1;
-
-                    if (!Program.test)
-                    {
-                        pieceMap[r, c] = -1;
-                    }
-                    else
+                    for (int c = 0; c < 7; c++)
                     {
                         if (Program.testPieceMap[r, c] == -1)
                         {
                             emptySpaceCount += 1;
                         }
-                        pieceMap[r, c] = Program.testPieceMap[r, c];
+                        pieces.map[r, c] = Program.testPieceMap[r, c];
                     }
                 }
+
+                emptySpaceCount = 0;
+            }
+            else
+            {
+                emptySpaceCount = 42;
             }
         }
 
@@ -145,7 +120,7 @@ namespace ConnectFour
 
                 for (int r = 0; r < 31; r++)
                 {
-                    board += $"{boardMap[r]}\n";
+                    board += $"{boardOutline[r]}\n";
                 }
 
                 Console.ForegroundColor = ConsoleColor.Blue;
@@ -159,23 +134,23 @@ namespace ConnectFour
             {
                 for (int c = 0; c < 7; c++)
                 {
-                    if (oldPieceMap[r, c] != pieceMap[r, c])
+                    if (oldPieces.map[r, c] != pieces.map[r, c])
                     {
-                        string[] piece = Board.piece.Clone() as string[];
+                        string[] piece = Screen.piece.Clone() as string[];
 
-                        if (pieceMap[r, c] == -1)
+                        if (pieces.map[r, c] == -1)
                         {
                             Console.ForegroundColor = Console.BackgroundColor;
                         }
-                        else if (pieceMap[r, c] == 0)
+                        else if (pieces.map[r, c] == 0)
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                         }
-                        else if (pieceMap[r, c] == 1)
+                        else if (pieces.map[r, c] == 1)
                         {
                             Console.ForegroundColor = ConsoleColor.Yellow;
                         }
-                        else if (pieceMap[r, c] == 2)
+                        else if (pieces.map[r, c] == 2)
                         {
                             piece = selectionPiece.Clone() as string[];
 
@@ -200,7 +175,7 @@ namespace ConnectFour
                             row += 1;
                         }
 
-                        oldPieceMap[r, c] = pieceMap[r, c];
+                        oldPieces.map[r, c] = pieces.map[r, c];
                     }
                 }
             }
