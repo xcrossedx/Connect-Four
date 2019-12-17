@@ -23,15 +23,15 @@ namespace ConnectFour
         };
 
         private static List<(int row, int col)> rankChecklist;
-        private static List<Rank> ranks = new List<Rank>();
+        readonly private static List<Rank> ranks = new List<Rank>();
 
         private static (int row, int col) chosenSpace = (0, 0);
 
-        private static (int level, bool expertLogic)[] difficulty = { (0, false), (0, false) };
+        readonly private static (int level, bool expertLogic)[] difficulty = { (0, false), (0, false) };
 
         public static void TakeTurn()
         {
-            Board.Draw(false);
+            Screen.Draw(false);
             ClearRanks();
             TakeSnapshot();
             GenerateRanks();
@@ -83,7 +83,7 @@ namespace ConnectFour
                 oppVal = 0;
             }
 
-            currentPieceMap = Board.pieceMap.Clone() as int[,];
+            currentPieceMap = Screen.pieces.map.Clone() as int[,];
         }
 
         private static List<(int row, int col)> MakeChecklist(int[,] pieceMap)
@@ -179,13 +179,13 @@ namespace ConnectFour
                             val = oppVal;
                         }
 
-                        if (Board.emptySpaceCount > difficulty[v].level)
+                        if (Screen.emptySpaceCount > difficulty[v].level)
                         {
                             stepCount = difficulty[v].level;
                         }
                         else
                         {
-                            stepCount = Board.emptySpaceCount;
+                            stepCount = Screen.emptySpaceCount;
                         }
 
                         //SETTING STARTING BOARD STATE FOR EACH NEW ITEM ON THE CHECKLIST
@@ -227,11 +227,11 @@ namespace ConnectFour
                                         {
                                             if (val == thisVal)
                                             {
-                                                rank.thisRank += Board.emptySpaceCount - step;
+                                                rank.thisRank += Screen.emptySpaceCount - step;
                                             }
                                             else
                                             {
-                                                rank.oppRank += Board.emptySpaceCount - step;
+                                                rank.oppRank += Screen.emptySpaceCount - step;
                                             }
                                             terminated = true;
                                         }
@@ -287,11 +287,11 @@ namespace ConnectFour
                                         {
                                             if (val == thisVal)
                                             {
-                                                rank.thisRank -= Board.emptySpaceCount - step;
+                                                rank.thisRank -= Screen.emptySpaceCount - step;
                                             }
                                             else
                                             {
-                                                rank.oppRank -= Board.emptySpaceCount - step;
+                                                rank.oppRank -= Screen.emptySpaceCount - step;
                                             }
                                             terminated = true;
                                         }
@@ -352,7 +352,7 @@ namespace ConnectFour
 
                             boardStates.Clear();
 
-                            if (difficulty[0].level == 6 && step == stepCount - 1 && stepCount != Board.emptySpaceCount && newBoardStates.Count() <= 2800 && newBoardStates.Count > 0)
+                            if (difficulty[0].level == 6 && step == stepCount - 1 && stepCount != Screen.emptySpaceCount && newBoardStates.Count() <= 2800 && newBoardStates.Count > 0)
                             {
                                 stepCount += 1;
                             }
@@ -473,7 +473,7 @@ namespace ConnectFour
                 }
 
                 //HARD PLUS CHECKS IF PLACING THE CURRENT PIECE MEANS THAT THE OPPONENT CAN FINISH SETTING UP A TRAP
-                if (difficulty[0].expertLogic && !forced && Board.emptySpaceCount > 5 && val == thisVal)
+                if (difficulty[0].expertLogic && !forced && Screen.emptySpaceCount > 5 && val == thisVal)
                 {
                     bool allowsTrap = false;
                     bool cleared = true;
@@ -597,7 +597,7 @@ namespace ConnectFour
                 {
                     rank.isCenterCol = true;
 
-                    if (Board.emptySpaceCount > 40 && val == thisVal)
+                    if (Screen.emptySpaceCount > 40 && val == thisVal)
                     {
                         forced = true;
                     }
@@ -643,7 +643,7 @@ namespace ConnectFour
                 placed = true;
             }
             //FOR HARD AND EXPERT BEGIN THE GAME WITH THE CENTER COLUMN
-            else if (difficulty[0].level >= 6 && Board.emptySpaceCount > 40)
+            else if (difficulty[0].level >= 6 && Screen.emptySpaceCount > 40)
             {
                 chosenSpace = rankChecklist[ranks.IndexOf(ranks.Find(x => x.isCenterCol))];
                 placed = true;

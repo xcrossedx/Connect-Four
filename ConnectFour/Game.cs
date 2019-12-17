@@ -31,7 +31,7 @@ namespace ConnectFour
             Console.Clear();
             over = false;
             backToMenu = false;
-            Board.Initialize();
+            Screen.Initialize();
 
             if (!Program.test)
             {
@@ -51,10 +51,10 @@ namespace ConnectFour
             else
             {
                 turn = "Yellow";
-                turnNum = 42 - Board.emptySpaceCount;
+                turnNum = 42 - Screen.emptySpaceCount;
             }
 
-            Board.Draw(false);
+            Screen.Draw(false);
         }
 
         public static void Play()
@@ -89,9 +89,9 @@ namespace ConnectFour
                     turnNum += 1;
                 }
 
-                Board.emptySpaceCount = 42 - turnNum;
+                Screen.emptySpaceCount = 42 - turnNum;
 
-                if (Board.emptySpaceCount == 0 && !over)
+                if (Screen.emptySpaceCount == 0 && !over)
                 {
                     over = true;
                     overState = "                                      Draw!";
@@ -100,7 +100,7 @@ namespace ConnectFour
 
             if (over)
             {
-                Board.Draw(false);
+                Screen.Draw(false);
                 Console.ReadLine();
             }
 
@@ -114,7 +114,7 @@ namespace ConnectFour
 
             for (int c = 3; c < 10; c++)
             {
-                if (Board.pieceMap[0, c % 7] == -1)
+                if (Screen.pieces.map[0, c % 7] == -1)
                 {
                     availableCols.Add(c % 7);
                 }
@@ -126,7 +126,7 @@ namespace ConnectFour
                 {
                     for (int r = 5; r >= 0; r--)
                     {
-                        if (Board.pieceMap[r, i] == -1)
+                        if (Screen.pieces.map[r, i] == -1)
                         {
                             availableRows.Add(r);
                             break;
@@ -147,14 +147,14 @@ namespace ConnectFour
 
                 while (!placed && !backToMenu)
                 {
-                    Board.pieceMap[availableRows[selectedSpace], availableCols[selectedSpace]] = 2;
-                    Board.Draw(false);
+                    Screen.pieces.map[availableRows[selectedSpace], availableCols[selectedSpace]] = 2;
+                    Screen.Draw(false);
 
                     ConsoleKey key = Console.ReadKey(true).Key;
 
                     if (key == ConsoleKey.RightArrow)
                     {
-                        Board.pieceMap[availableRows[selectedSpace], availableCols[selectedSpace]] = -1;
+                        Screen.pieces.map[availableRows[selectedSpace], availableCols[selectedSpace]] = -1;
 
                         if (selectedSpace == availableCols.Count() - 1)
                         {
@@ -165,11 +165,11 @@ namespace ConnectFour
                             selectedSpace += 1;
                         }
 
-                        Board.Draw(false);
+                        Screen.Draw(false);
                     }
                     else if (key == ConsoleKey.LeftArrow)
                     {
-                        Board.pieceMap[availableRows[selectedSpace], availableCols[selectedSpace]] = -1;
+                        Screen.pieces.map[availableRows[selectedSpace], availableCols[selectedSpace]] = -1;
 
                         if (selectedSpace == 0)
                         {
@@ -180,7 +180,7 @@ namespace ConnectFour
                             selectedSpace -= 1;
                         }
 
-                        Board.Draw(false);
+                        Screen.Draw(false);
                     }
                     else if (key == ConsoleKey.DownArrow)
                     {
@@ -203,22 +203,22 @@ namespace ConnectFour
         public static void PlacePiece()
         {
             (int row, int col) = sel;
-            Board.pieceMap[row, col] = -1;
+            Screen.pieces.map[row, col] = -1;
 
             //IF BLACK TURN PLACE BLACK PIECE AND SWITCH TURNS
             if (turn == "Red")
             {
                 for (int r = 0; r < row; r++)
                 {
-                    Board.pieceMap[r, col] = 0;
-                    Board.Draw(true);
-                    Board.pieceMap[r, col] = -1;
+                    Screen.pieces.map[r, col] = 0;
+                    Screen.Draw(true);
+                    Screen.pieces.map[r, col] = -1;
                     Thread.Sleep(100);
                 }
 
-                Board.pieceMap[row, col] = 0;
+                Screen.pieces.map[row, col] = 0;
                 turn = "Yellow";
-                Board.Draw(false);
+                Screen.Draw(false);
             }
 
             //IF WHITE TURN PLACE WHITE PIECE AND SWITCH TURNS
@@ -226,18 +226,18 @@ namespace ConnectFour
             {
                 for (int r = 0; r < row; r++)
                 {
-                    Board.pieceMap[r, col] = 1;
-                    Board.Draw(true);
-                    Board.pieceMap[r, col] = -1;
+                    Screen.pieces.map[r, col] = 1;
+                    Screen.Draw(true);
+                    Screen.pieces.map[r, col] = -1;
                     Thread.Sleep(100);
                 }
 
-                Board.pieceMap[row, col] = 1;
+                Screen.pieces.map[row, col] = 1;
                 turn = "Red";
-                Board.Draw(false);
+                Screen.Draw(false);
             }
 
-            over = Check(sel, Board.pieceMap);
+            over = Check(sel, Screen.pieces.map);
         }
 
         public static bool Check((int row, int col) space, int[,] pieceMap)
