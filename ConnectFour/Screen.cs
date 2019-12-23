@@ -5,14 +5,6 @@ namespace ConnectFour
     static class Screen
     {
         //Piece sprites
-        public static string[] emptyPiece =
-           {
-            "         ",
-            "         ",
-            "         ",
-            "         "
-        };
-
         public static string[] piece =
         {
             "  ▓▓▓▓▓  ",
@@ -108,7 +100,7 @@ namespace ConnectFour
         {
             bool CPU = false;
 
-            if (Game.players == 0 || (Game.players == 1 && Game.turn == "Yellow")) 
+            if (Game.players == 0 || (Game.players == 1 && Game.player == 2)) 
             {
                 CPU = true;
             }
@@ -123,9 +115,8 @@ namespace ConnectFour
                     board += $"{boardOutline[r]}\n";
                 }
 
-                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.ForegroundColor = Program.colors.board;
                 Console.Write(board);
-                Console.ForegroundColor = ConsoleColor.White;
                 boardPlaced = true;
             }
 
@@ -144,23 +135,23 @@ namespace ConnectFour
                         }
                         else if (pieces.map[r, c] == 0)
                         {
-                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.ForegroundColor = Program.colors.player1;
                         }
                         else if (pieces.map[r, c] == 1)
                         {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.ForegroundColor = Program.colors.player2;
                         }
                         else if (pieces.map[r, c] == 2)
                         {
                             piece = selectionPiece.Clone() as string[];
 
-                            if (Game.turn == "Red")
+                            if (Game.player == 1)
                             {
-                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.ForegroundColor = Program.colors.player1;
                             }
-                            else if (Game.turn == "Yellow")
+                            else if (Game.player == 2)
                             {
-                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.ForegroundColor = Program.colors.player2;
                             }
                         }
 
@@ -203,41 +194,35 @@ namespace ConnectFour
                     Console.ForegroundColor = ConsoleColor.DarkCyan;
                     Console.SetCursorPosition(40, 37);
                     Console.Write("+");
-                    Console.ForegroundColor = ConsoleColor.DarkCyan;
-                    if (Game.turn == "Red")
+                    if (Game.player == 1)
                     {
-                        Console.SetCursorPosition(33, 40);
-                        Console.Write("Place     Piece");
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.SetCursorPosition(39, 40);
+                        Console.ForegroundColor = Program.colors.player1;
                     }
                     else
                     {
-                        Console.SetCursorPosition(32, 40);
-                        Console.Write("Place        Piece");
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.SetCursorPosition(38, 40);
+                        Console.ForegroundColor = Program.colors.player2;
                     }
-                    Console.Write(Game.turn);
+                    Console.SetCursorPosition(35, 40);
+                    Console.Write("Place Piece");
                 }
                 else if (Game.over)
                 {
-                    if (Game.overState.Contains("Red"))
+                    if (Game.overState.Contains("1"))
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.ForegroundColor = Program.colors.player1;
                     }
-                    else if (Game.overState.Contains("Yellow"))
+                    else if (Game.overState.Contains("2"))
                     {
-                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.ForegroundColor = Program.colors.player2;
                     }
                     else
                     {
-                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                        Console.ForegroundColor = ConsoleColor.DarkMagenta;
                     }
                     Console.SetCursorPosition(0, 36);
                     Console.WriteLine($"{Game.overState}");
                     Console.ForegroundColor = ConsoleColor.DarkCyan;
-                    Console.WriteLine($"                                 ~~~~~~~~~~~~~~~");
+                    Console.WriteLine($"                                ~~~~~~~~~~~~~~~~~");
                     Console.Write("                              Hit       to continue");
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.SetCursorPosition(34, 38);

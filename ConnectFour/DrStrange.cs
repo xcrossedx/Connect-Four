@@ -72,7 +72,7 @@ namespace ConnectFour
                 difficulty[1] = dif2;
             }
 
-            if (Game.turn == "Red")
+            if (Game.player == 1)
             {
                 thisVal = 0;
                 oppVal = 1;

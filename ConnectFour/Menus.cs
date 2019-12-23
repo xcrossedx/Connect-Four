@@ -12,7 +12,7 @@ namespace ConnectFour
         {
             TitleCard();
             Controls();
-            Prompt();
+            MainPrompt();
         }
 
         private static void TitleCard()
@@ -88,14 +88,14 @@ namespace ConnectFour
 
             //TITLE CARD
             //BOARD BACKGROUND
-            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.ForegroundColor = Program.colors.board;
             Console.SetCursorPosition(0, 2);
             string board = "";
             foreach (string s in titleBoard) { board += $"{s}\n"; }
             Console.Write(board);
             //LETTERS AND TILES
             //ROW 1
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = Program.colors.player2;
             for (int c = 0; c < 7; c++)
             {
                 for (int r = 0; r < 4; r++)
@@ -107,38 +107,19 @@ namespace ConnectFour
             //ROW 2
             for (int c = 0; c < 7; c++)
             {
-                int pieceVal;
-
-                if (c < 3)
+                if (c % 2 == 0)
                 {
-                    pieceVal = c % 2;
-                }
-                else if (c == 3)
-                {
-                    pieceVal = 7;
+                    Console.ForegroundColor = Program.colors.player1;
                 }
                 else
                 {
-                    pieceVal = (c + 1) % 2;
-                }
-
-                if (pieceVal == 0)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                }
-                else if (pieceVal == 1)
-                {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.ForegroundColor = Program.colors.player2;
                 }
 
                 for (int r = 0; r < 4; r++)
                 {
                     Console.SetCursorPosition((c * 10) + 6, r + 8);
-                    if (pieceVal < 2)
+                    if (c != 3)
                     {
                         Console.Write(Screen.piece[r]);
                     }
@@ -149,8 +130,6 @@ namespace ConnectFour
                 }
             }
         }
-
-        private static int playerSelection = 1;
 
         private static void Controls()
         {
@@ -170,13 +149,86 @@ namespace ConnectFour
             Console.Write("+");
         }
 
-        private static void Prompt()
+        private static void MainPrompt()
+        {
+            bool selected = false;
+            int selection = 0;
+            string[] selectors = { "_________", "_____________________" };
+
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.SetCursorPosition(36, 20);
+            Console.Write("Play Game");
+            Console.SetCursorPosition(30, 25);
+            Console.Write("Change Color Profile");
+
+            while (!selected)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                if (selection == 0)
+                {
+                    Console.SetCursorPosition(30, 26);
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.Write(selectors[1]);
+
+                    Console.SetCursorPosition(36, 21);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write(selectors[0]);
+                }
+                else
+                {
+                    Console.SetCursorPosition(36, 21);
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.Write(selectors[0]);
+
+                    Random rng = new Random();
+
+                    Console.SetCursorPosition(30, 26);
+                    ConsoleColor[] colors = (ConsoleColor[]) Enum.GetValues(typeof(ConsoleColor));
+
+                    foreach (char c in selectors[1])
+                    {
+                        Console.ForegroundColor = colors[rng.Next(1, 15)];
+                        Console.Write(c);
+                    }
+                }
+
+                ConsoleKey input = Console.ReadKey(true).Key;
+
+                if (input == ConsoleKey.UpArrow || input == ConsoleKey.DownArrow)
+                {
+                    selection = (selection + 1) % 2;
+                }
+
+                if (input == ConsoleKey.Enter)
+                {
+                    selected = true;
+                }
+            }
+
+            DrawEscControl();
+            ClearPromptArea();
+
+            if (selection == 0)
+            {
+                PromptPlayers();
+            }
+            else
+            {
+                ClearControls();
+                PromptColors();
+            }
+        }
+
+        private static int playerSelection = 1;
+
+        private static void PromptPlayers()
         {
             bool selectedPlayers = false;
+            bool backToInitialPrompt = false;
 
             string[] playersSelection = { "___            ", "      ___      ", "            ___" };
 
-            //INITIAL PROMPT
+            //INITIAL PLAYER PROMPT
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.SetCursorPosition(32, 20);
             Console.Write("How many players?");
@@ -184,7 +236,7 @@ namespace ConnectFour
             Console.Write("0     1     2");
 
             //SELECTING NUMBER OF PLAYERS
-            while (!selectedPlayers)
+            while (!selectedPlayers && !backToInitialPrompt)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.SetCursorPosition(33, 23);
@@ -198,9 +250,9 @@ namespace ConnectFour
                     Console.ForegroundColor = ConsoleColor.DarkCyan;
                     Console.Write("vs. ");
                     Console.SetCursorPosition(29, 26);
-                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = Program.colors.player1;
                     Console.Write(" o      ");
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = Program.colors.player2;
                     Console.Write(" o                 ");
                 }
                 else if (playerSelection == 1)
@@ -212,9 +264,9 @@ namespace ConnectFour
                     Console.ForegroundColor = ConsoleColor.DarkGray;
                     Console.Write("[0]       ");
                     Console.SetCursorPosition(29, 26);
-                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = Program.colors.player1;
                     Console.Write("       o       ");
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = Program.colors.player2;
                     Console.Write(" o            ");
                 }
                 else if (playerSelection == 2)
@@ -225,9 +277,9 @@ namespace ConnectFour
                     Console.ForegroundColor = ConsoleColor.DarkCyan;
                     Console.Write("vs. ");
                     Console.SetCursorPosition(29, 26);
-                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = Program.colors.player1;
                     Console.Write("            o       ");
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = Program.colors.player2;
                     Console.Write("  o");
                 }
 
@@ -255,12 +307,23 @@ namespace ConnectFour
                     Game.players = playerSelection;
                     selectedPlayers = true;
                 }
+
+                if (input == ConsoleKey.Escape)
+                {
+                    backToInitialPrompt = true;
+                }
             }
 
-            if (Game.players < 2)
+            if (backToInitialPrompt)
             {
                 ClearPromptArea();
-                SecondPrompt();
+                ClearEscControl();
+                MainPrompt();
+            }
+            else if (Game.players < 2)
+            {
+                ClearPromptArea();
+                PromptDif1();
             }
             else
             {
@@ -268,24 +331,173 @@ namespace ConnectFour
             }
         }
 
-        public static void SecondPrompt()
+        private static void PromptColors()
+        {
+            DrawColorControls();
+
+            bool finished = false;
+            bool backToInitialPrompt = false;
+
+            ConsoleColor[] colors = {ConsoleColor.Red, ConsoleColor.Yellow, ConsoleColor.Blue, ConsoleColor.Green, ConsoleColor.Cyan, ConsoleColor.Magenta, ConsoleColor.Gray, ConsoleColor.DarkRed, ConsoleColor.DarkYellow, ConsoleColor.DarkBlue, ConsoleColor.DarkGreen, ConsoleColor.DarkCyan, ConsoleColor.DarkMagenta, ConsoleColor.DarkGray };
+
+            int[] selections = { Array.IndexOf(colors, Program.colors.player1), Array.IndexOf(colors, Program.colors.player2), Array.IndexOf(colors, Program.colors.board) };
+            int currentSelection = 0;
+
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.SetCursorPosition(31, 18);
+            Console.Write("Player 1 tile color");
+            Console.SetCursorPosition(31, 22);
+            Console.Write("Player 2 tile color");
+            Console.SetCursorPosition(35, 26);
+            Console.Write("Board color");
+
+            while (!finished && !backToInitialPrompt)
+            {
+                for (int s = 0; s < 3; s++)
+                {
+                    Console.SetCursorPosition(36, 20 + (4 * s));
+                    if (s == currentSelection)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Black;
+                    }
+                    Console.Write("<       >");
+                    Console.SetCursorPosition(38, 20 + (4 * s));
+                    Console.BackgroundColor = colors[selections[s]];
+                    Console.Write("     ");
+                    Console.BackgroundColor = ConsoleColor.Black;
+                }
+
+                ConsoleKey input = Console.ReadKey(true).Key;
+
+                if (input == ConsoleKey.RightArrow)
+                {
+                    if (selections[currentSelection] == colors.Length - 1)
+                    {
+                        selections[currentSelection] = 0;
+                    }
+                    else
+                    {
+                        selections[currentSelection] += 1;
+                    }
+                }
+
+                if (input == ConsoleKey.LeftArrow)
+                {
+                    if (selections[currentSelection] == 0)
+                    {
+                        selections[currentSelection] = colors.Length - 1;
+                    }
+                    else
+                    {
+                        selections[currentSelection] -= 1;
+                    }
+                }
+
+                if (input == ConsoleKey.UpArrow)
+                {
+                    if (currentSelection == 0)
+                    {
+                        currentSelection = 2;
+                    }
+                    else
+                    {
+                        currentSelection -= 1;
+                    }
+                }
+
+                if (input == ConsoleKey.DownArrow)
+                {
+                    if (currentSelection == 2)
+                    {
+                        currentSelection = 0;
+                    }
+                    else
+                    {
+                        currentSelection += 1;
+                    }
+                }
+
+                if (input == ConsoleKey.Enter)
+                {
+                    finished = true;
+                }
+
+                if (input == ConsoleKey.Escape)
+                {
+                    backToInitialPrompt = true;
+                }
+            }
+
+            ClearControls();
+
+            if (backToInitialPrompt)
+            {
+                ClearPromptArea();
+                MainMenu();
+            }
+            else
+            {
+                BuildProfile();
+                MainMenu();
+            }
+
+            void BuildProfile()
+            {
+                Program.colors.player1 = colors[selections[0]];
+                Program.colors.player2 = colors[selections[1]];
+                Program.colors.board = colors[selections[2]];
+            }
+        }
+
+        public static void DrawColorControls()
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(55, 36);
+            Console.Write("ESC");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.SetCursorPosition(53, 34);
+            Console.Write("Go Back");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.SetCursorPosition(18, 37);
+            Console.Write("Move Left         Move Right");
+            Console.SetCursorPosition(28, 34);
+            Console.Write("Move Up");
+            Console.SetCursorPosition(27, 40);
+            Console.Write("Move Down");
+            Console.SetCursorPosition(50, 40);
+            Console.Write("Apply Changes");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.SetCursorPosition(29, 37);
+            Console.Write("<   >");
+            Console.SetCursorPosition(31, 36);
+            Console.Write("^");
+            Console.SetCursorPosition(31, 38);
+            Console.Write("v");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.SetCursorPosition(54, 38);
+            Console.Write("ENTER");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.SetCursorPosition(31, 37);
+            Console.Write("+");
+            Console.SetCursorPosition(56, 37);
+            Console.Write("+");
+        }
+
+        public static void PromptDif1()
         {
             string[] difSelection = { "____                    ", "         ______         ", "                    ____" };
-            bool backToInitialPrompt = false;
+            bool backToPlayerPrompt = false;
 
             bool chosenDif1 = false;
             int dif1 = 0;
 
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.SetCursorPosition(39, 36);
-            Console.Write("ESC");
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.SetCursorPosition(37, 34);
-            Console.Write("Go Back");
-
             WritePrompt();
 
-            while (!chosenDif1 && !backToInitialPrompt)
+            while (!chosenDif1 && !backToPlayerPrompt)
             {
                 if (dif1 == 0)
                 {
@@ -327,7 +539,7 @@ namespace ConnectFour
 
                     if (dif1 == 2)
                     {
-                        if (ExpertLogicPrompt(0))
+                        if (PromptExpertLogic(0))
                         {
                             chosenDif1 = true;
                         }
@@ -345,19 +557,18 @@ namespace ConnectFour
 
                 if (input == ConsoleKey.Escape)
                 {
-                    backToInitialPrompt = true;
+                    backToPlayerPrompt = true;
                 }
             }
 
-            if (backToInitialPrompt)
+            if (backToPlayerPrompt)
             {
                 ClearPromptArea();
-                ClearEscControl();
-                Prompt();
+                PromptPlayers();
             }
             else if (Game.players == 0)
             {
-                ThirdPrompt();
+                PromptDif2();
             }
             else
             {
@@ -376,7 +587,7 @@ namespace ConnectFour
                 {
                     Console.SetCursorPosition(24, 21);
                     Console.Write("Select a difficulty for   player:");
-                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = Program.colors.player1;
                     Console.SetCursorPosition(48, 21);
                     Console.Write("O");
                     Console.ForegroundColor = ConsoleColor.DarkCyan;
@@ -386,7 +597,7 @@ namespace ConnectFour
             }
         }
 
-        public static void ThirdPrompt()
+        public static void PromptDif2()
         {
             string[] difSelection = { "____                    ", "         ______         ", "                    ____" };
             bool backToSecondPrompt = false;
@@ -438,7 +649,7 @@ namespace ConnectFour
 
                     if (dif2 == 2)
                     {
-                        if (ExpertLogicPrompt(1))
+                        if (PromptExpertLogic(1))
                         {
                             chosenDif2 = true;
                         }
@@ -462,7 +673,7 @@ namespace ConnectFour
 
             if (backToSecondPrompt)
             {
-                SecondPrompt();
+                PromptDif1();
             }
             else
             {
@@ -474,7 +685,7 @@ namespace ConnectFour
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.SetCursorPosition(24, 21);
                 Console.Write("Select a difficulty for   player:");
-                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = Program.colors.player2;
                 Console.SetCursorPosition(48, 21);
                 Console.Write("O");
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
@@ -483,7 +694,7 @@ namespace ConnectFour
             }
         }
 
-        private static bool ExpertLogicPrompt(int player)
+        private static bool PromptExpertLogic(int player)
         {
             ClearPromptArea();
 
@@ -555,11 +766,21 @@ namespace ConnectFour
 
         private static void ClearPromptArea()
         {
-            for (int i = 0; i <= 7; i++)
+            for (int i = 0; i <= 11; i++)
             {
-                Console.SetCursorPosition(0, 20 + i);
+                Console.SetCursorPosition(0, 18 + i);
                 Console.Write("                                                            ");
             }
+        }
+
+        private static void DrawEscControl()
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(39, 36);
+            Console.Write("ESC");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.SetCursorPosition(37, 34);
+            Console.Write("Go Back");
         }
 
         public static void ClearEscControl()
@@ -568,6 +789,15 @@ namespace ConnectFour
             Console.WriteLine("       ");
             Console.SetCursorPosition(39, 36);
             Console.Write("   ");
+        }
+
+        public static void ClearControls()
+        {
+            for (int r = 34; r < 41; r++)
+            {
+                Console.SetCursorPosition(0, r);
+                Console.WriteLine("                                                                           ");
+            }
         }
     }
 }

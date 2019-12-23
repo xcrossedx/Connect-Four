@@ -22,6 +22,8 @@ namespace ConnectFour
             { -1, 0,  1, 1,  0, 0, -1 }
         };
 
+        public static ColorProfile colors = new ColorProfile(ConsoleColor.Red, ConsoleColor.Yellow, ConsoleColor.Blue);
+
         static void Main()
         {
             Initialize();

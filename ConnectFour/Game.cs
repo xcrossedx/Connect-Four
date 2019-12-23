@@ -12,7 +12,7 @@ namespace ConnectFour
         public static string overState = "                                      Draw!";
 
         //CURRENT TURN
-        public static string turn = "null";
+        public static int player = 0;
         public static int turnNum = 0;
 
         //NUMBER OF PLAYERS
@@ -39,18 +39,18 @@ namespace ConnectFour
 
                 if (rng.Next() % 2 == 0)
                 {
-                    turn = "Red";
+                    player = 1;
                 }
                 else
                 {
-                    turn = "Yellow";
+                    player = 2;
                 }
 
                 turnNum = 0;
             }
             else
             {
-                turn = "Yellow";
+                player = 2;
                 turnNum = 42 - Screen.emptySpaceCount;
             }
 
@@ -71,7 +71,7 @@ namespace ConnectFour
 
                 if (players == 1)
                 {
-                    if (turn == "Red")
+                    if (player == 1)
                     {
                         Input();
                         turnNum += 1;
@@ -206,7 +206,7 @@ namespace ConnectFour
             Screen.pieces.map[row, col] = -1;
 
             //IF BLACK TURN PLACE BLACK PIECE AND SWITCH TURNS
-            if (turn == "Red")
+            if (player == 1)
             {
                 for (int r = 0; r < row; r++)
                 {
@@ -217,12 +217,12 @@ namespace ConnectFour
                 }
 
                 Screen.pieces.map[row, col] = 0;
-                turn = "Yellow";
+                player = 2;
                 Screen.Draw(false);
             }
 
             //IF WHITE TURN PLACE WHITE PIECE AND SWITCH TURNS
-            else if (turn == "Yellow")
+            else if (player == 2)
             {
                 for (int r = 0; r < row; r++)
                 {
@@ -233,7 +233,7 @@ namespace ConnectFour
                 }
 
                 Screen.pieces.map[row, col] = 1;
-                turn = "Red";
+                player = 1;
                 Screen.Draw(false);
             }
 
@@ -318,12 +318,12 @@ namespace ConnectFour
                     if (checkVal == 0)
                     {
                         won = true;
-                        overState = "                                    Red Wins!";
+                        overState = "                                  Player 1 Wins";
                     }
                     else if (checkVal == 1)
                     {
                         won = true;
-                        overState = "                                  Yellow Wins!";
+                        overState = "                                  Player 2 Wins";
                     }
                 }
             }
