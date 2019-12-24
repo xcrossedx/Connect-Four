@@ -174,6 +174,8 @@ namespace ConnectFour
             //CLEARING THE BOTTOM AREA OF THE SCREEN TO BE REPLACED
             ClearBottom();
 
+            EggCheck();
+
             if (!animating)
             {
                 if (!Game.over && !CPU)
@@ -243,6 +245,54 @@ namespace ConnectFour
             {
                 Console.SetCursorPosition(0, 34 + i);
                 Console.Write("                                                                           ");
+            }
+        }
+
+        private static void EggCheck()
+        {
+            if (Program.colors.player1 == ConsoleColor.DarkRed && Program.colors.player2 == ConsoleColor.DarkGreen && Program.colors.board == ConsoleColor.Gray)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.SetCursorPosition(11, 35);
+                Console.Write("><");
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.SetCursorPosition(11, 36);
+                Console.Write("/\\");
+                Console.SetCursorPosition(10, 37);
+                Console.Write("//\\\\");
+                Console.SetCursorPosition(9, 38);
+                Console.Write("///\\\\\\");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.SetCursorPosition(11, 39);
+                Console.Write("||");
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.SetCursorPosition(13, 36);
+                Console.Write("o");
+                Console.SetCursorPosition(9, 37);
+                Console.Write("o");
+                Console.SetCursorPosition(15, 38);
+                Console.Write("o");
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.SetCursorPosition(68, 35);
+                Console.Write("><");
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.SetCursorPosition(68, 36);
+                Console.Write("/\\");
+                Console.SetCursorPosition(67, 37);
+                Console.Write("//\\\\");
+                Console.SetCursorPosition(66, 38);
+                Console.Write("///\\\\\\");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.SetCursorPosition(68, 39);
+                Console.Write("||");
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.SetCursorPosition(70, 36);
+                Console.Write("o");
+                Console.SetCursorPosition(66, 37);
+                Console.Write("o");
+                Console.SetCursorPosition(72, 38);
+                Console.Write("o");
             }
         }
     }
