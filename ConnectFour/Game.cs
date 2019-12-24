@@ -9,7 +9,7 @@ namespace ConnectFour
     {
         //GAME OVER STATE
         public static bool over = false;
-        public static string overState = "                                      Draw!";
+        public static string overState = "      Draw!";
 
         //CURRENT TURN
         public static int player = 0;
@@ -94,7 +94,7 @@ namespace ConnectFour
                 if (Screen.emptySpaceCount == 0 && !over)
                 {
                     over = true;
-                    overState = "                                      Draw!";
+                    overState = "      Draw!";
                 }
             }
 
@@ -137,7 +137,7 @@ namespace ConnectFour
             else
             {
                 over = true;
-                overState = "                                      Draw!";
+                overState = "     Draw!";
             }
 
             if (!over)
@@ -318,12 +318,12 @@ namespace ConnectFour
                     if (checkVal == 0)
                     {
                         won = true;
-                        overState = "                                  Player 1 Wins";
+                        overState = " Player 1 Wins";
                     }
                     else if (checkVal == 1)
                     {
                         won = true;
-                        overState = "                                  Player 2 Wins";
+                        overState = " Player 2 Wins";
                     }
                 }
             }

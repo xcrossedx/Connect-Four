@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ConnectFour")]
+[assembly: AssemblyTitle("Connect Four")]
 [assembly: AssemblyDescription("A game of Connect Four")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("xCrossedx Games")]
-[assembly: AssemblyProduct("ConnectFour")]
+[assembly: AssemblyProduct("Connect Four")]
 [assembly: AssemblyCopyright("Copyright © xCrossedx Games 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.1.1.1")]
+[assembly: AssemblyFileVersion("1.1.1.1")]

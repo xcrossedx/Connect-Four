@@ -221,11 +221,13 @@ namespace ConnectFour
                     {
                         Console.ForegroundColor = ConsoleColor.DarkMagenta;
                     }
-                    Console.SetCursorPosition(0, 36);
-                    Console.WriteLine($"{Game.overState}");
+                    Console.SetCursorPosition(31, 36);
+                    Console.Write($"{Game.overState}");
                     Console.ForegroundColor = ConsoleColor.DarkCyan;
-                    Console.WriteLine($"                                ~~~~~~~~~~~~~~~~~");
-                    Console.Write("                              Hit       to continue");
+                    Console.SetCursorPosition(30, 37);
+                    Console.Write($"~~~~~~~~~~~~~~~~~");
+                    Console.SetCursorPosition(28, 38);
+                    Console.Write("Hit       to continue");
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.SetCursorPosition(34, 38);
                     Console.Write("ENTER");
