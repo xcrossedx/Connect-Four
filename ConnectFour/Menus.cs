@@ -153,36 +153,42 @@ namespace ConnectFour
         {
             bool selected = false;
             int selection = 0;
-            string[] selectors = { "_________", "_____________________" };
+            string[] selectors = { "_________", "_____________________", "_________" };
 
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.SetCursorPosition(36, 20);
             Console.Write("Play Game");
-            Console.SetCursorPosition(30, 25);
+            Console.SetCursorPosition(30, 24);
             Console.Write("Change Color Profile");
+            Console.SetCursorPosition(36, 28);
+            Console.Write("Exit Game");
 
             while (!selected)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 if (selection == 0)
                 {
-                    Console.SetCursorPosition(30, 26);
+                    Console.SetCursorPosition(30, 25);
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.Write(selectors[1]);
+                    Console.SetCursorPosition(36, 29);
+                    Console.Write(selectors[2]);
 
                     Console.SetCursorPosition(36, 21);
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write(selectors[0]);
                 }
-                else
+                else if (selection == 1)
                 {
                     Console.SetCursorPosition(36, 21);
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.Write(selectors[0]);
+                    Console.SetCursorPosition(36, 29);
+                    Console.Write(selectors[2]);
 
                     Random rng = new Random();
 
-                    Console.SetCursorPosition(30, 26);
+                    Console.SetCursorPosition(30, 25);
                     ConsoleColor[] colors = (ConsoleColor[]) Enum.GetValues(typeof(ConsoleColor));
 
                     foreach (char c in selectors[1])
@@ -191,12 +197,43 @@ namespace ConnectFour
                         Console.Write(c);
                     }
                 }
+                else if (selection == 2)
+                {
+                    Console.SetCursorPosition(30, 25);
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.Write(selectors[1]);
+                    Console.SetCursorPosition(36, 21);
+                    Console.Write(selectors[0]);
+
+                    Console.SetCursorPosition(36, 29);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write(selectors[2]);
+                }
 
                 ConsoleKey input = Console.ReadKey(true).Key;
 
-                if (input == ConsoleKey.UpArrow || input == ConsoleKey.DownArrow)
+                if (input == ConsoleKey.UpArrow)
                 {
-                    selection = (selection + 1) % 2;
+                    if (selection == 0)
+                    {
+                        selection = 2;
+                    }
+                    else
+                    {
+                        selection -= 1;
+                    }
+                }
+
+                if (input == ConsoleKey.DownArrow)
+                {
+                    if (selection == 2)
+                    {
+                        selection = 0;
+                    }
+                    else
+                    {
+                        selection += 1;
+                    }
                 }
 
                 if (input == ConsoleKey.Enter)
@@ -212,10 +249,14 @@ namespace ConnectFour
             {
                 PromptPlayers();
             }
-            else
+            else if (selection == 1)
             {
                 ClearControls();
                 PromptColors();
+            }
+            else if (selection == 2)
+            {
+                System.Environment.Exit(0);
             }
         }
 
