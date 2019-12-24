@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace ConnectFour
 {
@@ -165,7 +166,6 @@ namespace ConnectFour
 
             while (!selected)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
                 if (selection == 0)
                 {
                     Console.SetCursorPosition(30, 25);
@@ -180,21 +180,27 @@ namespace ConnectFour
                 }
                 else if (selection == 1)
                 {
+                    Random rng = new Random();
+
+                    ConsoleColor[] colors = (ConsoleColor[]) Enum.GetValues(typeof(ConsoleColor));
+
                     Console.SetCursorPosition(36, 21);
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.Write(selectors[0]);
                     Console.SetCursorPosition(36, 29);
                     Console.Write(selectors[2]);
 
-                    Random rng = new Random();
-
-                    Console.SetCursorPosition(30, 25);
-                    ConsoleColor[] colors = (ConsoleColor[]) Enum.GetValues(typeof(ConsoleColor));
-
-                    foreach (char c in selectors[1])
+                    while (Console.KeyAvailable == false)
                     {
-                        Console.ForegroundColor = colors[rng.Next(1, 15)];
-                        Console.Write(c);
+                        Console.SetCursorPosition(30, 25);
+
+                        foreach (char _ in selectors[1])
+                        {
+                            Console.ForegroundColor = colors[rng.Next(1, 14)];
+                            Console.Write(_);
+                        }
+
+                        Thread.Sleep(150);
                     }
                 }
                 else if (selection == 2)
